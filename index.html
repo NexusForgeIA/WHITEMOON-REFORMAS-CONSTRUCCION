@@ -360,14 +360,6 @@ section{padding:6rem 2rem}
 
 /* ─── GALERÍA ─── */
 #galeria{background:var(--bg)}
-.galeria-label{
-  display:inline-block;
-  background:var(--naranja-dim);border:1px solid var(--border);
-  color:var(--naranja);font-size:.7rem;font-weight:600;
-  padding:.25rem .8rem;border-radius:20px;
-  text-transform:uppercase;letter-spacing:1px;
-  margin-bottom:.5rem;
-}
 .gallery-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;
 }
@@ -613,7 +605,7 @@ footer{
   .projects-grid{grid-template-columns:repeat(2,1fr)}
   .proceso-grid{grid-template-columns:repeat(2,1fr)}
   .proceso-step:not(:last-child)::after{display:none}
-  .porque-grid{grid-template-columns:repeat(2,1fr) }
+  .porque-grid{grid-template-columns:repeat(2,1fr)}
   .test-grid{grid-template-columns:repeat(2,1fr)}
   .gallery-grid{grid-template-columns:repeat(2,1fr)}
   .footer-inner{grid-template-columns:1fr}
@@ -650,7 +642,7 @@ footer{
     <a href="#proyectos">Proyectos</a>
     <a href="#proceso">Proceso</a>
     <a href="#cta-final">Contacto</a>
-    <a href="#cta-final" class="nav-cta desk">Presupuesto gratis</a>
+    <a href="#" class="nav-cta desk" onclick="openChat(); return false;">Presupuesto gratis</a>
   </div>
   <div class="nav-burger" id="burger" aria-label="Menú" role="button">
     <span></span><span></span><span></span>
@@ -661,7 +653,7 @@ footer{
   <a href="#proyectos" class="mm-link">Proyectos</a>
   <a href="#proceso" class="mm-link">Proceso</a>
   <a href="#cta-final" class="mm-link">Contacto</a>
-  <a href="#cta-final" class="nav-cta">Presupuesto gratis</a>
+  <a href="#" class="nav-cta" onclick="openChat(); return false;">Presupuesto gratis</a>
 </div>
 
 <!-- HERO -->
@@ -678,7 +670,7 @@ footer{
     </h1>
     <p class="hero-sub">Reformas integrales de viviendas y locales comerciales. Presupuesto gratuito en 24 horas.</p>
     <div class="hero-btns">
-      <a href="#cta-final" class="btn-primary">Solicitar presupuesto</a>
+      <a href="#" class="btn-primary" onclick="openChat(); return false;">Solicitar presupuesto</a>
       <a href="#proyectos" class="btn-outline">Ver proyectos</a>
     </div>
     <div class="hero-stats">
@@ -1105,7 +1097,7 @@ var chatSend=document.getElementById('chat-send');
 var chatState={
   open:false,
   started:false,
-  step:0,       // 0=inicio, 1=tipo, 2=metros, 3=ciudad, 4=plazo, 5=nombre, 6=tel
+  step:0,
   tipo:'',metros:'',ciudad:'',plazo:'',nombre:''
 };
 
@@ -1116,6 +1108,7 @@ function norm(s){
 }
 
 function openChat(){
+  mobileMenu.classList.remove('open');
   chatModal.classList.add('open');
   chatState.open=true;
   chatBtn.style.display='none';
@@ -1125,7 +1118,7 @@ function openChat(){
       addMsg('bot','¡Hola! Bienvenido/a a WhiteMoon Reformas.\n¿En qué puedo ayudarte?');
       showQuick([
         {l:'🏠 Reforma de vivienda',v:'reforma de vivienda'},
-        {l:'🚿 Reforma de baño',v:'reforma de baño'},
+        {l:'🚿 Reforma de baño',v:'reforma de bano'},
         {l:'🍳 Reforma de cocina',v:'reforma de cocina'},
         {l:'🏪 Local comercial',v:'local comercial'},
         {l:'💰 ¿Cuánto cuesta?',v:'cuanto cuesta'}
@@ -1133,6 +1126,8 @@ function openChat(){
     });},1500);
   }
 }
+
+window.openChat = openChat;
 
 function closeChat(){
   if(chatState.step>=1&&chatState.step<3) return;
@@ -1197,7 +1192,6 @@ function handleInput(raw){
 }
 
 function processBot(n,raw){
-  // Durante captura de datos
   if(chatState.step===3){
     chatState.ciudad=raw;
     chatState.step=4;
@@ -1228,7 +1222,6 @@ function processBot(n,raw){
       return;
     }
     chatState.step=0;
-    // Restaurar X y botón flotante
     chatClose.style.display='';
     chatBtn.style.display='flex';
     var waMsg=encodeURIComponent(
@@ -1254,14 +1247,11 @@ function processBot(n,raw){
       link.appendChild(b);
       chatMessages.appendChild(link);
       chatMessages.scrollTop=chatMessages.scrollHeight;
-      showQuick([
-        {l:'🏠 Nueva consulta',v:'nueva consulta'}
-      ]);
+      showQuick([{l:'🏠 Nueva consulta',v:'nueva consulta'}]);
     });
     return;
   }
 
-  // Keywords precio
   if(/precio|cuanto|cuesta|coste|tarifa/.test(n)){
     botTyping(function(){
       addMsg('bot','El precio depende del tipo de reforma y los metros 💰\n\nOrientativamente:\n- Baño completo: desde 3.500€\n- Cocina completa: desde 4.500€\n- Reforma integral (por m²): desde 350€/m²\n- Local comercial: desde 300€/m²\n\nIncluye materiales, mano de obra y gestión de residuos.\n¿Quieres presupuesto exacto gratis?');
@@ -1270,7 +1260,6 @@ function processBot(n,raw){
     return;
   }
 
-  // Keywords plazo
   if(/plazo|tiempo|dias|semanas|cuando|cuanto tarda/.test(n)){
     botTyping(function(){
       addMsg('bot','Nuestros plazos orientativos 🗓️\n- Baño: 5-7 días laborables\n- Cocina: 7-10 días\n- Piso completo (80m²): 25-35 días\n- Local: según proyecto\nCumplimos plazos o te compensamos.');
@@ -1279,7 +1268,6 @@ function processBot(n,raw){
     return;
   }
 
-  // Keywords garantía
   if(/garantia|problema|defecto|averia/.test(n)){
     botTyping(function(){
       addMsg('bot','Ofrecemos 5 años de garantía en mano de obra 🛡️\nSi detectas cualquier problema después de la entrega, lo resolvemos sin coste adicional.');
@@ -1288,7 +1276,6 @@ function processBot(n,raw){
     return;
   }
 
-  // Keywords licencia
   if(/licencia|permiso|ayuntamiento|proyecto|arquitecto/.test(n)){
     botTyping(function(){
       addMsg('bot','Gestionamos todos los permisos y licencias necesarios 📋\nContamos con arquitecto e ingeniería propios para cualquier trámite.');
@@ -1297,7 +1284,6 @@ function processBot(n,raw){
     return;
   }
 
-  // Keywords materiales
   if(/materiale|calidad|marca|porcelanosa|roca|grohe/.test(n)){
     botTyping(function(){
       addMsg('bot','Trabajamos con materiales de primera calidad 🏆\nColaboramos con Porcelanosa, Roca, Grohe y otras marcas premium.\nTambién adaptamos el presupuesto a tu rango de precio.');
@@ -1306,14 +1292,13 @@ function processBot(n,raw){
     return;
   }
 
-  // Keywords nueva consulta
   if(/nueva consulta/.test(n)){
     chatState.step=0;chatState.tipo='';chatState.metros='';chatState.ciudad='';chatState.plazo='';chatState.nombre='';
     botTyping(function(){
       addMsg('bot','¿En qué puedo ayudarte?');
       showQuick([
         {l:'🏠 Reforma de vivienda',v:'reforma de vivienda'},
-        {l:'🚿 Reforma de baño',v:'reforma de baño'},
+        {l:'🚿 Reforma de baño',v:'reforma de bano'},
         {l:'🍳 Reforma de cocina',v:'reforma de cocina'},
         {l:'🏪 Local comercial',v:'local comercial'},
         {l:'💰 ¿Cuánto cuesta?',v:'cuanto cuesta'}
@@ -1322,13 +1307,11 @@ function processBot(n,raw){
     return;
   }
 
-  // Keywords presupuesto / reforma — iniciar flujo
-  if(/reforma|reformar|presupuesto|vivienda|piso|casa|local|bano|cocina|construccion|obra|quiero presupuesto|reforma de/.test(n)){
+  if(/reforma|reformar|presupuesto|vivienda|piso|casa|local|bano|cocina|construccion|obra|quiero presupuesto/.test(n)){
     startBudgetFlow(n,raw);
     return;
   }
 
-  // Fallback
   botTyping(function(){
     addMsg('bot','Puedo ayudarte con información sobre nuestros servicios o prepararte un presupuesto gratuito en 24h.\n¿Qué necesitas?');
     showQuick([
@@ -1340,7 +1323,6 @@ function processBot(n,raw){
 }
 
 function startBudgetFlow(n,raw){
-  // Si ya nos dieron el tipo en el mismo mensaje, saltar al siguiente paso
   var tipo='';
   if(/integral|vivienda|piso|casa/.test(n)) tipo='Reforma integral vivienda';
   else if(/bano/.test(n)) tipo='Solo baño/s';
@@ -1364,7 +1346,6 @@ function startBudgetFlow(n,raw){
         {l:'🏗️ Obra nueva',v:'obra nueva'}
       ]);
       chatState.step=1;
-      // Ocultar X durante captura
       chatClose.style.display='none';
     });
   }
@@ -1394,7 +1375,6 @@ function askMetros(){
   });
 }
 
-// Intercept step 1 and 2 choices
 var _origProcess=processBot;
 processBot=function(n,raw){
   if(chatState.step===1){
