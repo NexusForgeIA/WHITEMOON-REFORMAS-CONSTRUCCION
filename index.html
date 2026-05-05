@@ -650,7 +650,7 @@ footer{
     <a href="#proyectos">Proyectos</a>
     <a href="#proceso">Proceso</a>
     <a href="#cta-final">Contacto</a>
-    <a href="#cta-final" class="nav-cta desk">Presupuesto gratis</a>
+    <a href="#" class="nav-cta desk" onclick="openChat(); return false;">Presupuesto gratis</a>
   </div>
   <div class="nav-burger" id="burger" aria-label="Menú" role="button">
     <span></span><span></span><span></span>
@@ -661,7 +661,7 @@ footer{
   <a href="#proyectos" class="mm-link">Proyectos</a>
   <a href="#proceso" class="mm-link">Proceso</a>
   <a href="#cta-final" class="mm-link">Contacto</a>
-  <a href="#cta-final" class="nav-cta">Presupuesto gratis</a>
+  <a href="#" class="nav-cta" onclick="openChat(); return false;">Presupuesto gratis</a>
 </div>
 
 <!-- HERO -->
@@ -678,7 +678,7 @@ footer{
     </h1>
     <p class="hero-sub">Reformas integrales de viviendas y locales comerciales. Presupuesto gratuito en 24 horas.</p>
     <div class="hero-btns">
-      <a href="#cta-final" class="btn-primary">Solicitar presupuesto</a>
+      <a href="#" class="btn-primary" onclick="openChat(); return false;">Solicitar presupuesto</a>
       <a href="#proyectos" class="btn-outline">Ver proyectos</a>
     </div>
     <div class="hero-stats">
@@ -1140,6 +1140,8 @@ function closeChat(){
   chatState.open=false;
   chatBtn.style.display='flex';
 }
+
+window.openChat = openChat;
 
 chatBtn.addEventListener('click',openChat);
 chatClose.addEventListener('click',closeChat);
